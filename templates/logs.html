@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="flex items-center justify-center h-screen bg-gray-900">
+        <div class="bg-white shadow-lg p-8 rounded-md max-w-4xl w-full">
+            <h2 class="text-3xl font-semibold mb-6 text-gray-800">Log Einträge</h2>
+
+            {% if logs %}
+                <table class="min-w-full table-auto border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2 border-b">Timestamp</th>
+                            <th class="px-4 py-2 border-b">Aktion</th>
+                            <th class="px-4 py-2 border-b">IP-Adresse</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                            <tr>
+                                <td class="px-4 py-2 border-b text-sm text-gray-700">{{ log.timestamp }}</td>
+                                <td class="px-4 py-2 border-b text-sm text-gray-700">{{ log.action }}</td>
+                                <td class="px-4 py-2 border-b text-sm text-gray-700">{{ log.ip_address }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-gray-600">Keine Logs gefunden.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

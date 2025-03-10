@@ -1,1 +1,10 @@
-{"WA": {"password": "scrypt:32768:8:1$alk9Y3RfIb6P4eSD$da51752863e51d86889104fea7baab5b8df59e90834cdfc7c9c95b903431e60725ccf13d2c9d53d5e4ee55974c3c49bb047c8a4605acff9593e18dfbe742b1b1"}}
+{
+    "Rick": {
+        "password": "scrypt:32768:8:1$246W7c3ljszL6eul$f961346bad1b51eaa5c9761a57c152f0b1b321d2f64e5a72d2eb2ffcfe5a74d42c3b3f75b795d0ae88d7767214be99a874c8cfecd2bdbe511a92c40d6f8f0498",
+        "role": "admin"
+    },
+    "WA": {
+        "password": "hashed_password_here",
+        "role": "user"
+    }
+}

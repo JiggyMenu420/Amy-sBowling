@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="background-image flex flex-col items-center justify-start text-white min-h-screen py-10 w-full">
+    <h1 class="text-4xl font-semibold mb-8">Admin Panel</h1>
+
+    {% if session['role'] == 'admin' %}
+        <div id="user-list" class="w-full max-w-lg space-y-4">
+            {% for username, user in users.items() %}
+            <div class="flex justify-between items-center bg-gray-800 p-4 rounded-md">
+                <span>{{ username }} - Role: {{ user.role }}</span>
+                <button class="bg-yellow-500 text-white px-3 py-1 rounded" onclick="changePassword('{{ username }}')">
+                    Passwort ändern
+                </button>
+                <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="deleteUser('{{ username }}')">
+                    Löschen
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-red-500">Zugang nur für Admins.</p>
+    {% endif %}
+</div>
+
+<script>
+    function changePassword(username) {
+        const newPassword = prompt('Gib das neue Passwort ein:');
+        if (newPassword) {
+            fetch(`/change_password/${username}`, {  // ✅ Fix: Username in URL einfügen
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ new_password: newPassword })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) location.reload();
+            })
+            .catch(error => console.error('Fehler:', error));
+        }
+    }
+
+    function deleteUser(username) {
+        if (confirm(`Soll ${username} wirklich gelöscht werden?`)) {
+            fetch(`/delete_user/${username}`, {  // ✅ Fix: DELETE-URL korrekt
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) location.reload();
+            })
+            .catch(error => console.error('Fehler:', error));
+        }
+    }
+</script>
+{% endblock %}

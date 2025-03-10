@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="background-image flex flex-col items-center justify-start text-white min-h-screen py-10 w-full">
+    <h1 class="text-4xl font-semibold mb-8">Rechnungen</h1>
+
+    <div class="flex w-full gap-4">
+        <!-- Rechnungen Tabelle -->
+        <div class="bg-white text-black p-6 rounded-lg shadow-lg w-3/4">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Rechnungsübersicht</h2>
+            <table class="w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 p-3">Datum</th>
+                        <th class="border border-gray-300 p-3">Mitarbeiter</th>
+                        <th class="border border-gray-300 p-3">Produkte</th>
+                        <th class="border border-gray-300 p-3">Total (€)</th>
+                        <th class="border border-gray-300 p-3">Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody id="rechnungen-list">
+                    <!-- Hier werden die Rechnungen eingefügt -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Umsatz-Boxen (zentriert) -->
+        <div class="w-1/4 flex flex-col gap-4 mx-auto items-center">
+            <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-full">
+                <h2 class="text-2xl font-semibold mb-2">Tagesumsatz</h2>
+                <p class="text-3xl font-bold" id="tagesumsatz">0 €</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button zum Herunterladen der Excel-Datei -->
+    <div class="mt-4">
+        <a href="{{ url_for('download_rechnungen') }}">
+            <button class="bg-blue-500 text-white px-6 py-2 rounded-md">
+                Rechnungen ↓
+            </button>
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Annahme: isAdmin gibt an, ob der Benutzer ein Admin ist oder nicht.
+        // Diese Variable sollte von deinem Server oder einer Session-Variable kommen
+        const isAdmin = true;  // Hier kannst du den Admin-Status setzen. Beispiel: true für Admin, false für Nicht-Admin.
+        
+        const gespeicherteRechnungen = JSON.parse(localStorage.getItem("rechnungen")) || [];
+        const rechnungenList = document.getElementById("rechnungen-list");
+
+        const tagesumsatzDisplay = document.getElementById("tagesumsatz");
+
+        let gesamtumsatz = JSON.parse(localStorage.getItem("umsatz")) || {
+            tagesumsatz: 0,
+            letzterTag: new Date().getDate(),
+        };
+
+        // Funktion zum Berechnen des Tagesumsatzes
+        function calculateTagesumsatz() {
+            const jetzt = new Date();
+            const heutigerTag = jetzt.getDate();
+            const heutigesDatum = `${jetzt.getFullYear()}-${(jetzt.getMonth() + 1).toString().padStart(2, '0')}-${heutigerTag.toString().padStart(2, '0')}`;
+
+            // Berechnung des Tagesumsatzes
+            let tagesumsatz = 0;
+            gespeicherteRechnungen.forEach(rechnung => {
+                if (rechnung.datum === heutigesDatum) {
+                    tagesumsatz += parseFloat(rechnung.total);
+                }
+            });
+
+            gesamtumsatz.tagesumsatz = tagesumsatz;
+            gesamtumsatz.letzterTag = heutigerTag;
+
+            // Speichern des Umsatzes
+            localStorage.setItem("umsatz", JSON.stringify(gesamtumsatz));
+
+            // Anzeige des Tagesumsatzes
+            tagesumsatzDisplay.textContent = `${gesamtumsatz.tagesumsatz.toFixed(2)} €`;
+        }
+
+        // Die Tabelle aktualisieren
+        function updateTable() {
+            rechnungenList.innerHTML = ""; // Tabelle leeren
+
+            gespeicherteRechnungen.forEach((rechnung, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td class='border border-gray-300 p-3 text-center'>${rechnung.datum}</td>
+                    <td class='border border-gray-300 p-3 text-center'>${rechnung.mitarbeiter}</td>
+                    <td class='border border-gray-300 p-3 text-center'>${rechnung.produkte}</td>
+                    <td class='border border-gray-300 p-3 text-center'>${rechnung.total} €</td>
+                    <td class='border border-gray-300 p-3 text-center'>
+                        ${isAdmin ? `<button class="bg-red-500 text-white px-3 py-1 rounded delete-btn" data-index="${index}">Löschen</button>` : ''} 
+                    </td>
+                `;
+                rechnungenList.appendChild(row);
+            });
+
+            // Löschen-Buttons aktivieren
+            if (isAdmin) {
+                document.querySelectorAll(".delete-btn").forEach(button => {
+                    button.addEventListener("click", function() {
+                        const index = this.getAttribute("data-index");
+                        gespeicherteRechnungen.splice(index, 1);
+                        localStorage.setItem("rechnungen", JSON.stringify(gespeicherteRechnungen));
+                        updateTable();
+                        calculateTagesumsatz(); // Nach dem Löschen den Tagesumsatz berechnen
+                    });
+                });
+            }
+        }
+
+        // Funktion zum Hinzufügen einer Rechnung
+        function addRechnung(rechnung) {
+            gespeicherteRechnungen.push(rechnung);
+            localStorage.setItem("rechnungen", JSON.stringify(gespeicherteRechnungen));
+            updateTable();
+            calculateTagesumsatz(); // Nach dem Hinzufügen den Tagesumsatz berechnen
+        }
+
+        // Beispiel einer Rechnung hinzufügen (dieser Schritt ist optional, um zu testen)
+        // addRechnung({
+        //     datum: "2025-03-10", 
+        //     mitarbeiter: "Max Mustermann", 
+        //     produkte: "Produkt A, Produkt B", 
+        //     total: "50.00"
+        // });
+
+        updateTable();
+        calculateTagesumsatz(); // Initiale Berechnung des Tagesumsatzes
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+[
+    {
+        "timestamp": "2025-03-10 20:22:50",
+        "action": "Fehlerhafte Registrierung - Ung\u00fcltiger Code f\u00fcr Test",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-10 20:22:54",
+        "action": "Erfolgreiche Anmeldung von Rick",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-10 20:27:31",
+        "action": "Fehlerhafte Anmeldung - Ung\u00fcltiger Benutzername oder Passwort f\u00fcr Test",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-10 20:27:34",
+        "action": "Fehlerhafte Anmeldung - Ung\u00fcltiger Benutzername oder Passwort f\u00fcr Test1",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-10 20:28:33",
+        "action": "Fehlerhafte Registrierung - Ung\u00fcltiger Code f\u00fcr 333",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-10 20:28:37",
+        "action": "Erfolgreiche Anmeldung von Rick",
+        "ip_address": "127.0.0.1"
+    }
+]

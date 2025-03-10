@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="background-image flex flex-col items-center justify-start text-white min-h-screen py-10 w-full">
+
+    <h1 class="text-4xl font-semibold mb-8 text-center">Rechner</h1>
+
+    <!-- Extras Sektion mit Buttons (fixiert und immer oben) -->
+    <div class="mt-8 w-full flex justify-center gap-4" style="position: sticky; top: 20px; z-index: 10;">
+        <h2 class="text-xl font-semibold text-white">Extras</h2>
+    </div>
+    <div class="flex w-full justify-center gap-4 mt-4" style="position: sticky; top: 60px; z-index: 10;">
+        <button class="bg-yellow-500 text-white p-2 rounded shadow-md w-24 h-10" onclick="addProduct('Bahn', 5000)">Bahn</button>
+        <button class="bg-yellow-500 text-white p-2 rounded shadow-md w-24 h-10" onclick="addProduct('Club', 20000)">Club</button>
+        <button class="bg-yellow-500 text-white p-2 rounded shadow-md w-24 h-10" onclick="addProduct('Turnier', 10000)">Turnier</button>
+    </div>
+
+    <div class="flex w-full gap-4 mt-4">
+        <!-- Links: Erste Gruppe von 5 Knöpfen untereinander ohne Abstand und schmaler -->
+        <div class="grid grid-cols-1 gap-0 p-2 w-3/5 h-full overflow-y-auto">
+            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Tyskie', 3)">Tyskie</button>
+            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Heineken', 2.5)">Heineken</button>
+            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Bananen Weizen', 4)">Bananen Weizen</button>
+            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Holsten', 3.2)">Holsten</button>
+            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Corona', 3.5)">Corona</button>          
+        </div>
+
+        <!-- Rechts: Schmaleres senkrechtes Rechteck -->
+        <div class="bg-white text-black p-5 rounded shadow-md w-1/4 h-full"> <!-- Höhe geändert hier -->
+            <h2 class="text-xl font-semibold mb-4">Produkte</h2>
+            <div id="product-list">
+                <!-- Hier werden die Produkte angezeigt -->
+            </div>
+            <button id="copy-button" class="bg-blue-500 text-white py-2 px-4 rounded mt-4 w-full text-center" onclick="copyToClipboard()">Copy</button>
+            <button id="add-button" class="bg-green-500 text-white py-2 px-4 rounded mt-4 w-full text-center" onclick="addInvoice()">Hinzufügen</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let products = {};
+    let totalAmount = 0;  // Variable, um den Gesamtbetrag zu speichern
+
+    function addProduct(productName, price) {
+        if (products[productName]) {
+            products[productName].count++;
+        } else {
+            products[productName] = { count: 1, price: price };
+        }
+        totalAmount += price;  // Gesamtbetrag aktualisieren
+        updateProductList();
+    }
+
+    function updateProductList() {
+        const productListDiv = document.getElementById('product-list');
+        productListDiv.innerHTML = ''; // Löscht die bestehende Liste, um sie neu zu füllen
+
+        for (const product in products) {
+            const productDiv = document.createElement('div');
+            productDiv.classList.add('flex', 'justify-between', 'items-center', 'mb-2');
+            
+            const productText = document.createElement('span');
+            productText.textContent = `${product} x${products[product].count} - ${products[product].price} €`;
+            
+            const removeButton = document.createElement('button');
+            removeButton.classList.add('bg-red-500', 'text-white', 'px-2', 'py-1', 'rounded');
+            removeButton.textContent = 'x';
+            removeButton.onclick = function() {
+                totalAmount -= products[product].price;  // Gesamtbetrag anpassen
+                if (products[product].count > 1) {
+                    products[product].count--;
+                } else {
+                    delete products[product];
+                }
+                updateProductList();  // Liste aktualisieren
+            };
+            
+            productDiv.appendChild(productText);
+            productDiv.appendChild(removeButton);
+            productListDiv.appendChild(productDiv);
+        }
+
+        const totalDiv = document.createElement('div');
+        totalDiv.classList.add('mt-4', 'font-bold');
+        totalDiv.textContent = `Total: ${totalAmount.toFixed(2)} €`;
+        productListDiv.appendChild(totalDiv);
+    }
+
+    function copyToClipboard() {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleDateString('de-DE');
+        const textToCopy = `Essen und Trinken | Amys Bowling | ${formattedDate}`;
+        
+        const textArea = document.createElement('textarea');
+        textArea.value = textToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+    }
+
+    function addInvoice() {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleDateString('de-DE');
+        
+        // Den Benutzernamen aus der Session (mit Flask) oder direkt im Template einfügen
+        const mitarbeiter = "{{ session['username'] }}";  // Der Benutzername aus der Session, falls du Flask verwendest
+        const produkte = JSON.stringify(products);
+        const total = totalAmount.toFixed(2);
+
+        const invoice = { datum: formattedDate, mitarbeiter: mitarbeiter, produkte: produkte, total: total };
+
+        // Rechnungsdaten im localStorage speichern
+        let gespeicherteRechnungen = JSON.parse(localStorage.getItem('rechnungen')) || [];
+        gespeicherteRechnungen.push(invoice);
+        localStorage.setItem('rechnungen', JSON.stringify(gespeicherteRechnungen));
+
+        // Zur Rechnungen-Seite weiterleiten
+        window.location.href = '/rechnungen';
+    }
+</script>
+{% endblock %}
