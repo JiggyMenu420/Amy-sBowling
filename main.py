@@ -177,6 +177,7 @@ def team():
     flash('Du musst dich einloggen, um auf diese Seite zuzugreifen', 'error')
     return redirect(url_for('login'))
 
+
 # ✅ Download Rechnungen als Excel
 @app.route('/download_rechnungen')
 def download_rechnungen():
@@ -200,4 +201,4 @@ def download_rechnungen():
     return send_file(file_stream, as_attachment=True, download_name="rechnungen.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
