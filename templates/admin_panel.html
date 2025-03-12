@@ -9,12 +9,18 @@
             {% for username, user in users.items() %}
             <div class="flex justify-between items-center bg-gray-800 p-4 rounded-md">
                 <span>{{ username }} - Role: {{ user.role }}</span>
-                <button class="bg-yellow-500 text-white px-3 py-1 rounded" onclick="changePassword('{{ username }}')">
+                <!-- Button für Passwort ändern -->
+                <button class="btn-small bg-yellow-500 text-white" onclick="changePassword('{{ username }}')">
                     Passwort ändern
                 </button>
-                <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="deleteUser('{{ username }}')">
+                <!-- Button für Löschen -->
+                <button class="btn-small bg-red-500 text-white" onclick="deleteUser('{{ username }}')">
                     Löschen
                 </button>
+                <!-- Button für Benutzer-Logs anzeigen -->
+                <a href="{{ url_for('user_logs', username=username) }}" class="btn-small bg-blue-500 text-white">
+                    Admin Log anzeigen
+                </a>
             </div>
             {% endfor %}
         </div>

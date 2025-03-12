@@ -8,31 +8,33 @@
         <!-- Rechnungen Tabelle -->
         <div class="bg-white text-black p-6 rounded-lg shadow-lg w-3/4">
             <h2 class="text-2xl font-semibold mb-4 text-center">Rechnungsübersicht</h2>
-            <table class="w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border border-gray-300 p-3">Datum</th>
-                        <th class="border border-gray-300 p-3">Mitarbeiter</th>
-                        <th class="border border-gray-300 p-3">Produkte</th>
-                        <th class="border border-gray-300 p-3">Total (€)</th>
-                        <th class="border border-gray-300 p-3">Aktionen</th>
-                    </tr>
-                </thead>
-                <tbody id="rechnungen-list">
-                    <!-- Hier werden die Rechnungen eingefügt -->
-                </tbody>
-            </table>
+            <div class="overflow-y-auto" style="max-height: 400px;"> <!-- Maximalhöhe mit Scrollen -->
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300 p-3">Datum</th>
+                            <th class="border border-gray-300 p-3">Mitarbeiter</th>
+                            <th class="border border-gray-300 p-3">Produkte</th>
+                            <th class="border border-gray-300 p-3">Total (€)</th>
+                            <th class="border border-gray-300 p-3">Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rechnungen-list">
+                        <!-- Hier werden die Rechnungen eingefügt -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-
+    
         <!-- Umsatz-Boxen (zentriert) -->
         <div class="w-1/4 flex flex-col gap-4 mx-auto items-center">
             <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg text-center w-full">
-                <h2 class="text-2xl font-semibold mb-2">Tagesumsatz</h2>
-                <p class="text-3xl font-bold" id="tagesumsatz">0 €</p>
+                <h2 class="text-2xl font-semibold mb-2">Gesamtumsatz</h2>
+                <p class="text-3xl font-bold" id="gesamtumsatz">0 €</p>
             </div>
         </div>
     </div>
-
+    
     <!-- Button zum Herunterladen der Excel-Datei -->
     <div class="mt-4">
         <a href="{{ url_for('download_rechnungen') }}">
@@ -47,40 +49,32 @@
     document.addEventListener("DOMContentLoaded", function() {
         // Annahme: isAdmin gibt an, ob der Benutzer ein Admin ist oder nicht.
         // Diese Variable sollte von deinem Server oder einer Session-Variable kommen
-        const isAdmin = true;  // Hier kannst du den Admin-Status setzen. Beispiel: true für Admin, false für Nicht-Admin.
+        const isAdmin = {{ is_admin | tojson }};  // Admin-Status aus der Template-Variable
         
         const gespeicherteRechnungen = JSON.parse(localStorage.getItem("rechnungen")) || [];
         const rechnungenList = document.getElementById("rechnungen-list");
-
-        const tagesumsatzDisplay = document.getElementById("tagesumsatz");
+        const gesamtumsatzDisplay = document.getElementById("gesamtumsatz");
 
         let gesamtumsatz = JSON.parse(localStorage.getItem("umsatz")) || {
-            tagesumsatz: 0,
-            letzterTag: new Date().getDate(),
+            gesamtumsatz: 0,
         };
 
-        // Funktion zum Berechnen des Tagesumsatzes
-        function calculateTagesumsatz() {
-            const jetzt = new Date();
-            const heutigerTag = jetzt.getDate();
-            const heutigesDatum = `${jetzt.getFullYear()}-${(jetzt.getMonth() + 1).toString().padStart(2, '0')}-${heutigerTag.toString().padStart(2, '0')}`;
+        // Funktion zum Berechnen des Gesamtumsatzes
+        function calculateGesamtumsatz() {
+            let gesamtumsatzBerechnung = 0;
 
-            // Berechnung des Tagesumsatzes
-            let tagesumsatz = 0;
+            // Berechnung des Gesamtumsatzes
             gespeicherteRechnungen.forEach(rechnung => {
-                if (rechnung.datum === heutigesDatum) {
-                    tagesumsatz += parseFloat(rechnung.total);
-                }
+                gesamtumsatzBerechnung += parseFloat(rechnung.total);
             });
 
-            gesamtumsatz.tagesumsatz = tagesumsatz;
-            gesamtumsatz.letzterTag = heutigerTag;
+            gesamtumsatz.gesamtumsatz = gesamtumsatzBerechnung;
 
-            // Speichern des Umsatzes
+            // Speichern des Gesamtumsatzes
             localStorage.setItem("umsatz", JSON.stringify(gesamtumsatz));
 
-            // Anzeige des Tagesumsatzes
-            tagesumsatzDisplay.textContent = `${gesamtumsatz.tagesumsatz.toFixed(2)} €`;
+            // Anzeige des Gesamtumsatzes
+            gesamtumsatzDisplay.textContent = `${gesamtumsatz.gesamtumsatz.toFixed(2)} €`;
         }
 
         // Die Tabelle aktualisieren
@@ -95,7 +89,7 @@
                     <td class='border border-gray-300 p-3 text-center'>${rechnung.produkte}</td>
                     <td class='border border-gray-300 p-3 text-center'>${rechnung.total} €</td>
                     <td class='border border-gray-300 p-3 text-center'>
-                        ${isAdmin ? `<button class="bg-red-500 text-white px-3 py-1 rounded delete-btn" data-index="${index}">Löschen</button>` : ''} 
+                        ${isAdmin ? `<button class="bg-red-500 text-white px-3 py-1 rounded delete-btn" data-index="${index}">Löschen</button>` : '<span class="text-red-500">Keine Rechte zum Löschen</span>'} 
                     </td>
                 `;
                 rechnungenList.appendChild(row);
@@ -109,7 +103,7 @@
                         gespeicherteRechnungen.splice(index, 1);
                         localStorage.setItem("rechnungen", JSON.stringify(gespeicherteRechnungen));
                         updateTable();
-                        calculateTagesumsatz(); // Nach dem Löschen den Tagesumsatz berechnen
+                        calculateGesamtumsatz(); // Nach dem Löschen den Gesamtumsatz berechnen
                     });
                 });
             }
@@ -120,19 +114,11 @@
             gespeicherteRechnungen.push(rechnung);
             localStorage.setItem("rechnungen", JSON.stringify(gespeicherteRechnungen));
             updateTable();
-            calculateTagesumsatz(); // Nach dem Hinzufügen den Tagesumsatz berechnen
+            calculateGesamtumsatz(); // Nach dem Hinzufügen den Gesamtumsatz berechnen
         }
 
-        // Beispiel einer Rechnung hinzufügen (dieser Schritt ist optional, um zu testen)
-        // addRechnung({
-        //     datum: "2025-03-10", 
-        //     mitarbeiter: "Max Mustermann", 
-        //     produkte: "Produkt A, Produkt B", 
-        //     total: "50.00"
-        // });
-
         updateTable();
-        calculateTagesumsatz(); // Initiale Berechnung des Tagesumsatzes
+        calculateGesamtumsatz(); // Initiale Berechnung des Gesamtumsatzes
     });
 </script>
 

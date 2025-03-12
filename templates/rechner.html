@@ -2,45 +2,109 @@
 
 {% block content %}
 <div class="background-image flex flex-col items-center justify-start text-white min-h-screen py-10 w-full">
-
     <h1 class="text-4xl font-semibold mb-8 text-center">Rechner</h1>
 
-    <!-- Extras Sektion mit Buttons (fixiert und immer oben) -->
-    <div class="mt-8 w-full flex justify-center gap-4" style="position: sticky; top: 20px; z-index: 10;">
-        <h2 class="text-xl font-semibold text-white">Extras</h2>
-    </div>
-    <div class="flex w-full justify-center gap-4 mt-4" style="position: sticky; top: 60px; z-index: 10;">
-        <button class="bg-yellow-500 text-white p-2 rounded shadow-md w-24 h-10" onclick="addProduct('Bahn', 5000)">Bahn</button>
-        <button class="bg-yellow-500 text-white p-2 rounded shadow-md w-24 h-10" onclick="addProduct('Club', 20000)">Club</button>
-        <button class="bg-yellow-500 text-white p-2 rounded shadow-md w-24 h-10" onclick="addProduct('Turnier', 10000)">Turnier</button>
-    </div>
+    <!-- Flex Container für Getränke und Extras -->
+    <div class="flex gap-16 mt-4 w-full justify-start">
 
-    <div class="flex w-full gap-4 mt-4">
-        <!-- Links: Erste Gruppe von 5 Knöpfen untereinander ohne Abstand und schmaler -->
-        <div class="grid grid-cols-1 gap-0 p-2 w-3/5 h-full overflow-y-auto">
-            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Tyskie', 3)">Tyskie</button>
-            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Heineken', 2.5)">Heineken</button>
-            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Bananen Weizen', 4)">Bananen Weizen</button>
-            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Holsten', 3.2)">Holsten</button>
-            <button class="bg-white text-black p-2 rounded shadow-md border w-48 h-8" onclick="addProduct('Corona', 3.5)">Corona</button>          
-        </div>
-
-        <!-- Rechts: Schmaleres senkrechtes Rechteck -->
-        <div class="bg-white text-black p-5 rounded shadow-md w-1/4 h-full"> <!-- Höhe geändert hier -->
-            <h2 class="text-xl font-semibold mb-4">Produkte</h2>
-            <div id="product-list">
-                <!-- Hier werden die Produkte angezeigt -->
+        <!-- Getränke Sektion -->
+        <div class="flex flex-col items-center ml-8">
+            <h2 class="text-xl font-semibold text-white mb-4 text-center">Bier</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <button class="bg-red-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Tyskie', 150)">Tyskie</button>
+                <button class="bg-red-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Heineken', 160)">Heineken</button>
+                <button class="bg-red-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Bananen Weizen', 130)">Bananen Weizen</button>
             </div>
-            <button id="copy-button" class="bg-blue-500 text-white py-2 px-4 rounded mt-4 w-full text-center" onclick="copyToClipboard()">Copy</button>
-            <button id="add-button" class="bg-green-500 text-white py-2 px-4 rounded mt-4 w-full text-center" onclick="addInvoice()">Hinzufügen</button>
+            <div class="flex gap-4 justify-center mt-4">
+                <button class="bg-red-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Holsten', 130)">Holsten</button>
+                <button class="bg-red-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Corona', 170)">Corona</button>
+            </div>
         </div>
+
+        <!-- Alkohol Sektion -->
+        <div class="flex flex-col items-center ml-8">
+            <h2 class="text-xl font-semibold text-white mb-4 text-center">Alkohol</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Amy Shot', 250)">Clear Shot</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Hot Shot', 250)">Chocomel</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Clear Shot', 250)">Fanta Exotic</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Twerkis', 200)">Amy Shot</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Hot Shirin', 200)">Hot Shot</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Purplerain', 100)">Hot Shirin</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Chocomel', 100)">Purplerain</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Fanta Exotic', 110)">Cola Cherry</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md border-none w-24 h-12 flex justify-center items-center" onclick="addProduct('Fanta Exotic', 120)">Twerkis</button>
+            </div>
+
+            <h2 class="text-xl font-semibold text-white mb-4 mt-12 text-center">Essen/Snacks</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <!-- Erste Reihe der Essen/Snacks Knöpfe -->
+                <button class="bg-green-500 text-black p-2 rounded shadow-md border-none w-32 h-12 flex justify-center items-center text-center" onclick="addProduct('Chili Fries', 160)">Chili Fries</button>
+                <button class="bg-green-500 text-black p-2 rounded shadow-md border-none w-32 h-12 flex justify-center items-center text-center" onclick="addProduct('Chili Dog', 180)">Chili Dog</button>
+                <button class="bg-green-500 text-black p-2 rounded shadow-md border-none w-32 h-12 flex justify-center items-center text-center" onclick="addProduct('Bacon Fries', 160)">Bacon Fries</button>
+            </div>
+            <div class="grid grid-cols-3 gap-4 mt-4">
+                <!-- Zweite Reihe der Essen/Snacks Knöpfe -->
+                <button class="bg-green-500 text-black p-2 rounded shadow-md border-none w-32 h-12 flex justify-center items-center text-center" onclick="addProduct('Sucuk Toast', 140)">Sucuk Toast</button>
+                <button class="bg-green-500 text-black p-2 rounded shadow-md border-none w-32 h-12 flex justify-center items-center text-center" onclick="addProduct('Tortilla Chips', 100)">Tortilla Chips</button>
+                <button class="bg-green-500 text-black p-2 rounded shadow-md border-none w-32 h-12 flex justify-center items-center text-center" onclick="addProduct('Nacho Chips', 100)">Nacho Chips</button>
+            </div>
+            <div class="flex justify-center gap-4 mt-4">
+                <!-- Zwei zentrierte Knöpfe unter den Essen/Snacks Knöpfen -->
+                <button class="bg-green-500 text-black p-2 rounded shadow-md border-none w-32 h-12 flex justify-center items-center text-center" onclick="addProduct('Pizzaschnecken', 140)">Pizzaschnecken</button>
+                <button class="bg-green-500 text-black p-2 rounded shadow-md border-none w-32 h-12 flex justify-center items-center text-center" onclick="addProduct('Bowling Monster', 200)">Bowling Monster</button>
+            </div>
+            
+        </div>
+
+        <!-- Extras Sektion -->
+        <div class="flex flex-col items-center ml-8 gap-4">
+            <h2 class="text-xl font-semibold text-white mb-4 text-center">Extras</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md w-24 min-h-[30px] flex justify-center items-center" onclick="addProduct('Bahn', 5000)">Bahn</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md w-24 min-h-[30px] flex justify-center items-center" onclick="addProduct('Club', 20000)">Club</button>
+                <button class="bg-yellow-500 text-black p-2 rounded shadow-md w-24 min-h-[30px] flex justify-center items-center" onclick="addProduct('Turnier', 10000)">Turnier</button>
+            </div>
+
+            <!-- Rabatt Buttons -->
+            <div class="flex gap-4 mt-16">
+                <button class="bg-green-500 text-white p-2 rounded shadow-md w-24 h-10 flex justify-center items-center" onclick="applyDiscount(0.2)">20%</button>
+                <button class="bg-green-500 text-white p-2 rounded shadow-md w-24 h-10 flex justify-center items-center" onclick="applyDiscount(0.3)">30%</button>
+                <button class="bg-gray-500 text-white p-2 rounded shadow-md w-24 h-10 flex justify-center items-center" onclick="applyDiscount(0)">0%</button>
+            </div>
+            
+            <!-- Zubehör Text und Buttons -->
+            <h2 class="text-xl font-semibold text-white mb-4 mt-12 text-center">Zubehör</h2>
+            <div class="flex gap-4 mt-4">
+                <button class="bg-purple-500 text-white p-2 rounded shadow-md w-24 h-10 flex justify-center items-center" onclick="addProduct('Vape', 500)">Vape</button>
+                <button class="bg-purple-500 text-white p-2 rounded shadow-md w-24 h-10 flex justify-center items-center" onclick="addProduct('Liquid', 1000)">Liquid</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixierte Produktliste ganz rechts -->
+    <div class="bg-white text-black p-5 rounded shadow-md w-1/4 h-[500px] overflow-y-auto fixed right-10 top-32">
+        <h2 class="text-xl font-semibold mb-4">Produkte</h2>
+        <div id="product-list" class="h-64 overflow-y-auto">
+            <!-- Hier werden die Produkte angezeigt -->
+        </div>
+
+        <!-- Fixierter Gesamtbetrag oben -->
+        <div class="mt-4 font-bold" id="fixed-total">
+            <span id="total-amount">Total: 0.00 € (inkl. 0.00 € Rabatt)</span>
+        </div>
+
+        <!-- Buttons bleiben unter dem Gesamtbetrag -->
+        <button id="copy-button" class="bg-blue-500 text-white py-2 px-4 rounded mt-4 w-full text-center" onclick="copyToClipboard()">Copy</button>
+        <button id="add-button" class="bg-green-500 text-white py-2 px-4 rounded mt-4 w-full text-center" onclick="addInvoice()">Hinzufügen</button>
     </div>
 
 </div>
 
 <script>
     let products = {};
-    let totalAmount = 0;  // Variable, um den Gesamtbetrag zu speichern
+    let totalAmount = 0;
+    let discountAmount = 0;
 
     function addProduct(productName, price) {
         if (products[productName]) {
@@ -48,13 +112,24 @@
         } else {
             products[productName] = { count: 1, price: price };
         }
-        totalAmount += price;  // Gesamtbetrag aktualisieren
+        totalAmount += price;
+        updateProductList();
+    }
+
+    function applyDiscount(discount) {
+        if (discount === 0) {
+            totalAmount = totalAmount + discountAmount;
+            discountAmount = 0;
+        } else {
+            discountAmount = totalAmount * discount;
+            totalAmount = totalAmount - discountAmount;
+        }
         updateProductList();
     }
 
     function updateProductList() {
         const productListDiv = document.getElementById('product-list');
-        productListDiv.innerHTML = ''; // Löscht die bestehende Liste, um sie neu zu füllen
+        productListDiv.innerHTML = '';
 
         for (const product in products) {
             const productDiv = document.createElement('div');
@@ -67,13 +142,13 @@
             removeButton.classList.add('bg-red-500', 'text-white', 'px-2', 'py-1', 'rounded');
             removeButton.textContent = 'x';
             removeButton.onclick = function() {
-                totalAmount -= products[product].price;  // Gesamtbetrag anpassen
+                totalAmount -= products[product].price;
                 if (products[product].count > 1) {
                     products[product].count--;
                 } else {
                     delete products[product];
                 }
-                updateProductList();  // Liste aktualisieren
+                updateProductList();
             };
             
             productDiv.appendChild(productText);
@@ -81,10 +156,7 @@
             productListDiv.appendChild(productDiv);
         }
 
-        const totalDiv = document.createElement('div');
-        totalDiv.classList.add('mt-4', 'font-bold');
-        totalDiv.textContent = `Total: ${totalAmount.toFixed(2)} €`;
-        productListDiv.appendChild(totalDiv);
+        document.getElementById('total-amount').textContent = `Total: ${totalAmount.toFixed(2)} € (inkl. ${discountAmount.toFixed(2)} € Rabatt)`;
     }
 
     function copyToClipboard() {
@@ -104,19 +176,16 @@
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleDateString('de-DE');
         
-        // Den Benutzernamen aus der Session (mit Flask) oder direkt im Template einfügen
-        const mitarbeiter = "{{ session['username'] }}";  // Der Benutzername aus der Session, falls du Flask verwendest
+        const mitarbeiter = "{{ session['username'] }}";
         const produkte = JSON.stringify(products);
         const total = totalAmount.toFixed(2);
 
         const invoice = { datum: formattedDate, mitarbeiter: mitarbeiter, produkte: produkte, total: total };
 
-        // Rechnungsdaten im localStorage speichern
         let gespeicherteRechnungen = JSON.parse(localStorage.getItem('rechnungen')) || [];
         gespeicherteRechnungen.push(invoice);
         localStorage.setItem('rechnungen', JSON.stringify(gespeicherteRechnungen));
 
-        // Zur Rechnungen-Seite weiterleiten
         window.location.href = '/rechnungen';
     }
 </script>

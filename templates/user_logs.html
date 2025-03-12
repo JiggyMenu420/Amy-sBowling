@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="background-image flex flex-col items-center justify-start text-white min-h-screen py-10 w-full">
+    <h1 class="text-4xl font-semibold mb-8">Admin Log von {{ username }}</h1>
+
+    {% if logs %}
+        <!-- Container für die Logs mit Scroll-Funktion -->
+        <div class="logs-container overflow-y-auto max-h-96 w-full max-w-lg space-y-4 bg-gray-800 p-4 rounded-md">
+            {% for log in logs %}
+            <div class="bg-gray-700 p-4 rounded-md">
+                <span class="text-sm text-white">{{ log.timestamp }} - {{ log.action }} (IP: {{ log.ip_address }})</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-red-500">Keine Logeinträge gefunden.</p>
+    {% endif %}
+</div>
+{% endblock %}

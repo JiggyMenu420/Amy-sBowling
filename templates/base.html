@@ -15,24 +15,6 @@
             background-repeat: no-repeat;
             color: white;
         }
-        .receipt {
-            background-color: rgba(255, 255, 255, 0.9); /* Halbtransparenter Hintergrund */
-            color: black; /* Textfarbe */
-            padding: 20px;
-            border-radius: 8px;
-            width: 200px; /* Breite der Kassenzettel-Spalte */
-            position: fixed; /* Fixiert die Spalte */
-            right: 20px; /* Abstand vom rechten Rand */
-            top: 100px; /* Abstand vom oberen Rand */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Schatten für die Spalte */
-        }
-        .receipt h2 {
-            font-size: 1.5rem; /* Schriftgröße für den Titel */
-            margin-bottom: 10px; /* Abstand unter dem Titel */
-        }
-        .receipt-item {
-            margin-bottom: 8px; /* Abstand zwischen den Kassenzettel-Elementen */
-        }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -52,7 +34,7 @@
                         <a href="/rechnungen" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Rechnungen</a>
                         
                         <!-- Admin Panel Button nur für Admin sichtbar -->
-                        {% if session['role'] == 'admin' %}  <!-- Prüft, ob der Benutzer Admin ist -->
+                        {% if session['role'] == 'admin' %}
                             <a href="/admin_panel" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin Panel</a>
                             <!-- Logs Button für Admin sichtbar -->
                             <a href="/logs" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logs</a>
@@ -72,6 +54,10 @@
                                     <i class="fas fa-sign-out-alt"></i> Logout
                                 </button>
                             </form>
+                            <!-- Neuer Button für Passwort ändern -->
+                            <a href="/change_password" class="flex items-center gap-x-2 text-gray-700 block w-full px-4 py-2 text-left text-sm" role="menuitem" tabindex="-1">
+                                <i class="fas fa-lock"></i> Passwort ändern
+                            </a>
                         </div>
                     </div>
                 </div>
