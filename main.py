@@ -316,4 +316,4 @@ def download_rechnungen():
     return send_file(file_stream, as_attachment=True, download_name="rechnungen.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
