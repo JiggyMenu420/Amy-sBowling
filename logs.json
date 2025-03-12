@@ -473,5 +473,45 @@
         "timestamp": "2025-03-12 08:37:14",
         "action": "Nicht-berechtigter Zugriff auf Admin-Panel von Test (IP: 127.0.0.1)",
         "ip_address": "Rick"
+    },
+    {
+        "timestamp": "2025-03-12 21:16:29",
+        "action": "Zugriffsversuch auf Admin-Panel von nicht berechtigtem Benutzer: Unbekannter Benutzer",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 21:16:29",
+        "action": "Nicht-berechtigter Zugriff auf Admin-Panel von Unbekannter Benutzer (IP: 127.0.0.1)",
+        "ip_address": "Rick"
+    },
+    {
+        "timestamp": "2025-03-12 21:42:34",
+        "action": "Benutzer Rick hat sein Passwort ge\u00e4ndert",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 21:42:55",
+        "action": "Benutzer Test hat sein Passwort ge\u00e4ndert",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 21:46:36",
+        "action": "Admin Rick hat das Passwort von Test ge\u00e4ndert",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 21:47:10",
+        "action": "Admin Rick hat das Passwort von Test ge\u00e4ndert",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 21:47:23",
+        "action": "Benutzer Test hat sein Passwort ge\u00e4ndert",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 21:47:33",
+        "action": "Benutzer Rick hat sein Passwort ge\u00e4ndert",
+        "ip_address": "127.0.0.1"
     }
 ]

@@ -3,7 +3,7 @@
 {% block content %}
     <div class="flex items-center justify-center h-screen bg-gray-900">
         <div class="bg-white shadow-lg p-8 rounded-md max-w-md w-full">
-            <h2 class="text-3xl font-semibold mb-6 text-gray-800">Sign Up</h2>
+            <h2 class="text-3xl font-semibold mb-6 text-gray-800">Regestrieren</h2>
             {% if error %}
                 <div class="bg-red-500 text-white p-3 mb-4">
                     {{ error }}
@@ -33,7 +33,7 @@
                     <i class="fas fa-lock absolute top-3 right-4 text-gray-500"></i>
                     <i class="fas fa-eye absolute top-3 right-10 text-gray-500 cursor-pointer" onclick="togglePasswordVisibility('confirm_password', this)"></i>
                 </div>
-                <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded-md transition duration-300 hover:bg-green-600">Sign Up</button>
+                <button type="submit" class="w-full bg-green-500 text-white py-2 px-4 rounded-md transition duration-300 hover:bg-green-600">Regestrieren</button>
             </form>
             <p class="text-gray-600 mt-4">Du bist schon ein Mitarbeiter? <a href="{{ url_for('login') }}" class="text-blue-500 hover:underline">Login</a></p>
         </div>

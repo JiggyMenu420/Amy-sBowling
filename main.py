@@ -171,7 +171,6 @@ def signup():
 def dashboard():
     if 'username' in session:
         return render_template('dashboard.html', username=session['username'])
-    flash('Du musst dich zuerst einloggen', 'error')
     return redirect(url_for('login'))
 
 # Admin-Panel und Logs-Seite
@@ -239,65 +238,64 @@ def team():
     flash('Du musst dich einloggen, um auf diese Seite zuzugreifen', 'error')
     return redirect(url_for('login'))
 
-# Passwort für einen anderen Benutzer ändern (Admin-Funktion)
-@app.route('/change_password/<username>', methods=['POST'])
-def change_password_for_user(username):
-    if not is_admin():
-        flash('Zugriff verweigert: Nur für Admins', 'error')
-        return redirect(url_for('login'))
-
-    # Neues Passwort aus dem Body extrahieren
-    data = request.get_json()
-    new_password = data.get('new_password')
-
-    if not new_password:
-        return jsonify({'success': False, 'message': 'Kein Passwort angegeben.'}), 400
-
-    # Passwort für den angegebenen Benutzer ändern
-    users = load_users()
-    if username not in users:
-        return jsonify({'success': False, 'message': 'Benutzer nicht gefunden.'}), 404
-
-    hashed_password = generate_password_hash(new_password)
-    users[username]['password'] = hashed_password
-    save_users(users)
-
-    return jsonify({'success': True, 'message': f'Passwort für {username} wurde erfolgreich geändert.'})
-
-
 # Passwort ändern Route
 @app.route('/change_password', methods=['GET', 'POST'])
 def change_password():
     if request.method == 'POST':
         new_password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_password')
+        ip_address = request.remote_addr
 
-        # Überprüfen, ob die Passwörter übereinstimmen
         if new_password != confirm_password:
             flash('Die Passwörter stimmen nicht überein.', 'error')
             return redirect(url_for('change_password'))
 
-        # Hashen des neuen Passworts
         hashed_password = generate_password_hash(new_password)
-
         username = session.get('username')
+        
         if username:
             users = load_users()
             if username in users:
                 users[username]['password'] = hashed_password
                 save_users(users)
 
-                # Benutzer ausloggen
+                log_action(f"Benutzer {username} hat sein Passwort geändert", ip_address)
+                
                 session.pop('username', None)
                 session.pop('role', None)
-
-                # Kein flash gesetzt, direkt zur Login-Seite
-                return redirect(url_for('login'))  # Benutzer wird zum Login weitergeleitet
+                return redirect(url_for('login'))
 
         flash('Fehler beim Ändern des Passworts.', 'error')
         return redirect(url_for('change_password'))
 
     return render_template('change_password.html')
+
+
+# Passwort für einen anderen Benutzer ändern (Admin-Funktion)
+@app.route('/change_password/<username>', methods =['POST'])
+def change_password_for_usser(username):
+    if'role' not in session or session['role'] != 'admin':
+        flash('Zugrif verweigert: Nur für Admins', 'error')
+        return redirect(url_for('login'))
+    
+    data = request.get_json()
+    new_password = data.get('new_password')
+    ip_address = request.remote_addr
+
+    if not new_password:
+        return jsonify({'success': False, 'message': 'Kein Passwort angegeben'}), 400
+    
+    users = load_users()
+    if username not in users:
+        return jsonify({'success': False, 'message': 'Benutzer nicht gefunden'}), 404
+    
+    hashed_password= generate_password_hash(new_password)
+    users[username]['password'] = hashed_password
+    save_users(users)
+
+    log_action(f"Admin {session['username']} hat das Passwort von {username} geändert", ip_address)
+
+    return jsonify({'success': True, 'message': f'Passwort für {username} wurde erfolgreich geändert.'})
 
 @app.route('/user_logs/<username>')
 def user_logs(username):
@@ -347,8 +345,6 @@ def mitarbeiter_kontakte():
         
         # Kontakte in der JSON-Datei speichern
         save_kontakte(kontakte)
-        
-        flash('Kontakt wurde erfolgreich hinzugefügt.', 'success')
         return redirect(url_for('mitarbeiter_kontakte'))
 
     kontakte = lade_kontakte()  # Lade Kontakte und zeige sie im Template
@@ -368,7 +364,6 @@ def loesche_kontakt(index):
     if 0 <= index < len(kontakte):
         kontakte.pop(index)  # Löscht den Kontakt mit dem übergebenen Index
         save_kontakte(kontakte)  # Speichert die geänderte Liste
-        flash('Kontakt wurde erfolgreich gelöscht.', 'success')
     else:
         flash('Kontakt konnte nicht gefunden werden.', 'error')
 

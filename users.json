@@ -1,10 +1,10 @@
 {
     "Rick": {
-        "password": "scrypt:32768:8:1$9ilNcQoA9d4dxt93$f7e8c33b11640acd29432cb2c8d1eac2d999e547911051226f20ed451d205f78628cf44c1683de232bf48181ad4c9fbe9fafb59511dbdfb37c0eb8f531833558",
+        "password": "scrypt:32768:8:1$HRfcEjAv873BKRhO$5d20c510c7f20547b5b347437a36675dab69a293844fb0f96b165e39867700925d82f4d6c2495cf58afbc4eb4751a95c7391f8f8f460e3b4fbdb41cb17922edf",
         "role": "admin"
     },
     "Test": {
-        "password": "scrypt:32768:8:1$0XjGVEnnntQWEqRd$65d033140433e0684918b81763a0108d0320f6ab294d6eea4281671f6779f636acd35a85e911491bf517d05bb9ba7975631acc0ab334e850f66ca2719c5c4b82",
+        "password": "scrypt:32768:8:1$zlokxrTIvXFzWTVi$c272a413a7dfab455cf80c0fedc42d273929ccf3eacaa6c5780f9a5349d2ae4ec94fb35b7bae5a78f3f7f0c0da050ef461504e10483c082997e309623fcbd626",
         "role": "user"
     }
 }
