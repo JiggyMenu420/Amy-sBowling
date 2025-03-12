@@ -423,5 +423,55 @@
         "timestamp": "2025-03-12 06:44:10",
         "action": "Nicht-berechtigter Zugriff auf Admin-Panel von Test (IP: 127.0.0.1)",
         "ip_address": "Rick"
+    },
+    {
+        "timestamp": "2025-03-12 08:28:41",
+        "action": "Erfolgreiche Registrierung von Test",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 08:30:05",
+        "action": "Zugriffsversuch auf Admin-Panel von nicht berechtigtem Benutzer: Test",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 08:30:05",
+        "action": "Nicht-berechtigter Zugriff auf Admin-Panel von Test (IP: 127.0.0.1)",
+        "ip_address": "Rick"
+    },
+    {
+        "timestamp": "2025-03-12 08:33:15",
+        "action": "Erfolgreiche Registrierung von Test",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 08:33:24",
+        "action": "Zugriffsversuch auf Admin-Panel von nicht berechtigtem Benutzer: Test",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 08:33:24",
+        "action": "Nicht-berechtigter Zugriff auf Admin-Panel von Test (IP: 127.0.0.1)",
+        "ip_address": "Rick"
+    },
+    {
+        "timestamp": "2025-03-12 08:36:19",
+        "action": "Zugriffsversuch auf Admin-Panel von nicht berechtigtem Benutzer: Test",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 08:36:19",
+        "action": "Nicht-berechtigter Zugriff auf Admin-Panel von Test (IP: 127.0.0.1)",
+        "ip_address": "Rick"
+    },
+    {
+        "timestamp": "2025-03-12 08:37:14",
+        "action": "Zugriffsversuch auf Admin-Panel von nicht berechtigtem Benutzer: Test",
+        "ip_address": "127.0.0.1"
+    },
+    {
+        "timestamp": "2025-03-12 08:37:14",
+        "action": "Nicht-berechtigter Zugriff auf Admin-Panel von Test (IP: 127.0.0.1)",
+        "ip_address": "Rick"
     }
 ]

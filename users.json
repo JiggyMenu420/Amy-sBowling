@@ -3,12 +3,8 @@
         "password": "scrypt:32768:8:1$9ilNcQoA9d4dxt93$f7e8c33b11640acd29432cb2c8d1eac2d999e547911051226f20ed451d205f78628cf44c1683de232bf48181ad4c9fbe9fafb59511dbdfb37c0eb8f531833558",
         "role": "admin"
     },
-    "WA": {
-        "password": "hashed_password_here",
-        "role": "user"
-    },
     "Test": {
-        "password": "scrypt:32768:8:1$HqLZYcfP3lI26z7J$3011b47dfb25395370cedf00ba75f65f2f6f7c912ed8166c60e20c38ef5279a36764a2149b14e95f52078e50dbca02760fd736c5c73560271ca45d6f40fd3edd",
+        "password": "scrypt:32768:8:1$0XjGVEnnntQWEqRd$65d033140433e0684918b81763a0108d0320f6ab294d6eea4281671f6779f636acd35a85e911491bf517d05bb9ba7975631acc0ab334e850f66ca2719c5c4b82",
         "role": "user"
     }
 }

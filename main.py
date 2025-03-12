@@ -14,6 +14,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # Session läuft 7
 
 USER_FILE = 'users.json'
 LOG_FILE = 'logs.json'
+KONTAKTE_FILE = 'kontakte.json'
 
 # Helper function to load users
 def load_users():
@@ -33,6 +34,28 @@ def load_logs():
         with open(LOG_FILE, 'r', encoding='utf-8') as file:
             return json.load(file)
     return []
+
+def lade_kontakte():
+    try:
+        with open(KONTAKTE_FILE, 'r', encoding='utf-8') as file:
+            kontakte = json.load(file)
+            # Sortiere Kontakte nach Rang, wobei die höheren Ränge zuerst kommen
+            kontakte.sort(key=lambda x: x['rang'], reverse=True)
+            return kontakte
+    except FileNotFoundError:
+        return []  # Wenn keine Datei existiert, gebe eine leere Liste zurück
+    except json.JSONDecodeError:
+        return []  # Falls die JSON-Datei leer oder fehlerhaft ist
+
+
+# Funktion, um die Kontakte in die JSON-Datei zu speichern
+def save_kontakte(kontakte):
+    with open('kontakte.json', 'w') as file:
+        json.dump(kontakte, file, indent=4)
+
+def is_admin():
+    # Stelle sicher, dass die Session-Daten korrekt überprüft werden
+    return session.get('role') == 'admin'
 
 
 # Helper function to notify admins about unauthorized access
@@ -72,6 +95,11 @@ def log_failed_access(username, ip_address):
 # Helper function to check if user is admin
 def is_admin():
     return 'role' in session and session['role'] == 'admin'
+
+@app.after_request
+def add_cache_control(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    return response
 
 # Login-Route
 @app.route('/', methods=['GET', 'POST'])
@@ -149,18 +177,24 @@ def dashboard():
 # Admin-Panel und Logs-Seite
 @app.route('/admin_panel')
 def admin_panel():
-    # Wenn der Benutzer Admin ist, zeige das Admin-Panel
+    # Überprüfe, ob der Benutzer in der Session ist und Admin-Rechte hat
     if 'username' in session and is_admin():
         users = load_users()
-        logs = load_logs()  # Alle Logs laden
+        logs = load_logs()
+        print(f"Admin Panel Zugriff von {session['username']}")  # Debug-Ausgabe
         return render_template('admin_panel.html', users=users, logs=logs)
 
-    # Wenn der Benutzer kein Admin ist, logge den Versuch und benachrichtige alle Admins
+    # Wenn der Benutzer kein Admin ist, logge den Versuch und benachrichtige die Admins
     ip_address = request.remote_addr
     username = session.get('username', 'Unbekannter Benutzer')
-    log_failed_access(username, ip_address)  # Logge den fehlgeschlagenen Zugriff
-    notify_admins(username, ip_address)  # Benachrichtige die Admins
+    print(f"Fehlgeschlagener Zugriff durch {username} von {ip_address}")
+
+    log_failed_access(username, ip_address)
+    notify_admins(username, ip_address)
+
     return redirect(url_for('dashboard'))
+
+
 
 # In der Funktion, die die Logs lädt
 @app.route('/logs')
@@ -292,6 +326,56 @@ def delete_user(username):
         return redirect(url_for('admin_panel'))
     flash('Zugriff verweigert: Nur für Admins', 'error')
     return redirect(url_for('login'))
+
+@app.route('/mitarbeiter_kontakte', methods=['GET', 'POST'])
+def mitarbeiter_kontakte():
+    if request.method == 'POST':
+        rang = request.form['rang']
+        name = request.form['name']
+        nummer = request.form['nummer']
+        
+        # Neues Kontaktobjekt erstellen
+        neuer_kontakt = {
+            'rang': int(rang),
+            'name': name,
+            'nummer': nummer
+        }
+        
+        # Lade aktuelle Kontakte
+        kontakte = lade_kontakte()
+        kontakte.append(neuer_kontakt)  # Neuen Kontakt hinzufügen
+        
+        # Kontakte in der JSON-Datei speichern
+        save_kontakte(kontakte)
+        
+        flash('Kontakt wurde erfolgreich hinzugefügt.', 'success')
+        return redirect(url_for('mitarbeiter_kontakte'))
+
+    kontakte = lade_kontakte()  # Lade Kontakte und zeige sie im Template
+    return render_template('mitarbeiter_kontakte.html', kontakte=kontakte)
+
+
+
+
+@app.route('/loesche_kontakt/<int:index>', methods=['POST'])
+def loesche_kontakt(index):
+    kontakte = lade_kontakte()
+
+    if 'role' not in session or session['role'] != 'admin':
+        flash('Nur Admins können Kontakte löschen.', 'error')
+        return redirect(url_for('mitarbeiter_kontakte'))
+
+    if 0 <= index < len(kontakte):
+        kontakte.pop(index)  # Löscht den Kontakt mit dem übergebenen Index
+        save_kontakte(kontakte)  # Speichert die geänderte Liste
+        flash('Kontakt wurde erfolgreich gelöscht.', 'success')
+    else:
+        flash('Kontakt konnte nicht gefunden werden.', 'error')
+
+    return redirect(url_for('mitarbeiter_kontakte'))
+
+
+
 
 # Download Rechnungen als Excel
 @app.route('/download_rechnungen')

@@ -13,6 +13,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-attachment: fixed; /* Fixiere das Hintergrundbild */
             color: white;
         }
     </style>
@@ -33,10 +34,11 @@
                         <a href="/rechner" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Rechner</a>
                         <a href="/rechnungen" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Rechnungen</a>
                         
-                        <!-- Admin Panel Button nur für Admin sichtbar -->
+                        <!-- Hier fügen wir den Kontakte-Button hinzu -->
+                        <a href="/mitarbeiter_kontakte" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Kontakte</a>
+                        
                         {% if session['role'] == 'admin' %}
                             <a href="/admin_panel" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin Panel</a>
-                            <!-- Logs Button für Admin sichtbar -->
                             <a href="/logs" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logs</a>
                         {% endif %}
                     </div>

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10 p-4 bg-white shadow-md rounded-md">
+    <h2 class="text-lg font-semibold text-black mb-4">Mitarbeiter-Kontakte</h2>
+
+    <!-- Container für die Tabelle mit scrollbarem Bereich -->
+    <div class="max-h-[300px] overflow-y-auto">
+        <!-- Tabelle für Kontakte -->
+        <table class="w-full border border-gray-300 text-black">
+            <thead>
+                <tr class="bg-gray-200 text-black">
+                    <th class="p-2 border text-center">Rang</th>
+                    <th class="p-2 border text-center">Name</th>
+                    <th class="p-2 border text-center">Nummer</th>
+                    {% if session['role'] == 'admin' %}
+                        <th class="p-2 border text-center">Aktion</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for kontakt in kontakte %}
+                <tr class="text-black">
+                    <td class="p-2 border text-center">{{ kontakt.rang }}</td>
+                    <td class="p-2 border text-center">{{ kontakt.name }}</td>
+                    <td class="p-2 border text-center">{{ kontakt.nummer }}</td>
+                    {% if session['role'] == 'admin' %}
+                    <td class="p-2 border text-center">
+                        <form action="{{ url_for('loesche_kontakt', index=loop.index0) }}" method="post" class="inline">
+                            <button type="submit" class="text-red-500 hover:text-red-700">
+                                Löschen
+                            </button>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add-Button -->
+    <button onclick="openForm()" class="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
+        Add
+    </button>
+
+    <!-- Verstecktes Formular zum Hinzufügen eines Kontakts -->
+    <div id="kontaktForm" class="hidden mt-4">
+        <form action="{{ url_for('mitarbeiter_kontakte') }}" method="post" class="space-y-2">
+            <input type="number" name="rang" placeholder="Rang (1-12)" min="1" max="12" required class="w-full px-3 py-2 border rounded-md text-black">
+            <input type="text" name="name" placeholder="Name" required class="w-full px-3 py-2 border rounded-md text-black">
+            <input type="text" name="nummer" placeholder="Nummer" required class="w-full px-3 py-2 border rounded-md text-black">
+            <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600">Speichern</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openForm() {
+        document.getElementById('kontaktForm').classList.toggle('hidden');
+    }
+</script>
+{% endblock %}
